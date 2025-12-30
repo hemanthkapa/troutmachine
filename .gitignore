@@ -1,0 +1,22 @@
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+.venv/
+
+# Node
+node_modules/
+dist/
+build/
+.npm/
+
+# Misc
+.DS_Store
+.idea/
+.vscode/
+
+# Data
+data/
+*.db
