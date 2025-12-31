@@ -202,7 +202,7 @@ export default function Machine() {
       {/* RESULTS STATE */}
       {status === "results" && !selectedArtwork && (
         <div className="state-results fade-in">
-          {artworks.filter((art) => art.image_url && art.title && art.artist)
+          {artworks.filter((art) => art.image_url && art.title)
             .length > 0 ? (
             <div className="gallery-track" ref={galleryTrackRef}>
               {artworks
