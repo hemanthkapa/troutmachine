@@ -239,7 +239,7 @@ export default function Machine() {
                     >
                       <img src={art.image_url} alt={art.title} />
                       <div className="artwork-info">
-                        <h2>{art.title}</h2>
+                        <h2>{art.title || "Untitled"}</h2>
                         <p>{art.artist || "Artist Unknown"}</p>
                       </div>
                     </div>
