@@ -7,7 +7,7 @@ export default function Machine() {
   const [status, setStatus] = useState("idle"); // idle, curating, results
   const [query, setQuery] = useState("");
   const [artworks, setArtworks] = useState([]);
-  const [title, setTitle] = useState("mysterious trout machine");
+  const [title, setTitle] = useState("Mysterious Trout Machine");
   const galleryTrackRef = useRef(null);
 
   const handleSearch = async (e) => {
@@ -118,7 +118,7 @@ export default function Machine() {
   const reset = () => {
     setStatus("idle");
     setQuery("");
-    setTitle("mysterious trout machine");
+    setTitle("Mysterious Trout Machine");
     setArtworks([]);
     setSelectedArtwork(null);
   };
