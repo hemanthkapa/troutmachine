@@ -8,10 +8,13 @@ import os
 
 app = FastAPI()
 
-# CORS for frontend development
+# CORS configuration - set ALLOWED_ORIGINS env var in production
+# Example: ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For dev only
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
