@@ -86,6 +86,11 @@ def map_row_to_artwork(row, base_url: str = "http://127.0.0.1:32001") -> Artwork
         url=row['url']
     )
 
+@app.get("/health")
+def health_check():
+    """Health check endpoint for monitoring."""
+    return {"status": "ok"}
+
 @app.get("/api/search", response_model=List[Artwork])
 def search_artworks(request: Request, q: str = Query(..., min_length=1)):
     """Search by title or artist."""
