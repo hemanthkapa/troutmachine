@@ -7,7 +7,7 @@
   background-color: #fdfdfd;
   /* White smoke */
   color: #111;
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   /* Placeholder for premium font */
   overflow: hidden;
   transition: background-color 0.5s;
@@ -252,7 +252,6 @@ input::placeholder {
   /* Increased top padding from 0 to 15vh */
   /* Center the first item */
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
   height: 70vh;
   align-items: center;
   scrollbar-width: none;
@@ -439,7 +438,7 @@ input::placeholder {
   font-size: 2rem;
   font-weight: bold;
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   /* Clean sans-serif for title */
 }
 

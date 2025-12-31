@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./Machine.css";
 
 const API_Base = import.meta.env.VITE_API_URL || "http://127.0.0.1:32001/api";
@@ -8,6 +8,7 @@ export default function Machine() {
   const [query, setQuery] = useState("");
   const [artworks, setArtworks] = useState([]);
   const [title, setTitle] = useState("mysterious trout machine");
+  const galleryTrackRef = useRef(null);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -99,6 +100,33 @@ export default function Machine() {
     setSelectedArtwork(null);
   };
 
+  // Mouse wheel scroll handler for horizontal gallery scrolling with smooth behavior
+  useEffect(() => {
+    const galleryElement = galleryTrackRef.current;
+    if (!galleryElement || selectedArtwork) return; // Don't attach if detail view is open
+
+    const handleWheel = (e) => {
+      // If there's horizontal scrolling (trackpad gesture), let it work naturally
+      if (Math.abs(e.deltaX) > 0) {
+        return; // Don't prevent default, allow native trackpad scrolling
+      }
+
+      // Only convert vertical scroll (mouse wheel) to horizontal
+      if (Math.abs(e.deltaY) > 0) {
+        e.preventDefault();
+        // Direct scrollLeft update for instant, smooth response like trackpad
+        galleryElement.scrollLeft += e.deltaY * 1.5;
+      }
+    };
+
+    // Add event listener with passive: false to allow preventDefault
+    galleryElement.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      galleryElement.removeEventListener("wheel", handleWheel);
+    };
+  }, [status, artworks, selectedArtwork]); // Re-attach when selectedArtwork changes
+
   return (
     <div className={`machine-container ${status}`}>
       {/* HEADER */}
@@ -176,7 +204,7 @@ export default function Machine() {
         <div className="state-results fade-in">
           {artworks.filter((art) => art.image_url && art.title && art.artist)
             .length > 0 ? (
-            <div className="gallery-track">
+            <div className="gallery-track" ref={galleryTrackRef}>
               {artworks
                 .filter(
                   (art) => art.image_url && art.title
