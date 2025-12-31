@@ -112,7 +112,7 @@ export default function Machine() {
           />
           <h1 className="results-title">{title}</h1>
           <button className="search-again-link" onClick={reset}>
-            search again
+            Search again
           </button>
         </header>
       )}
@@ -126,15 +126,15 @@ export default function Machine() {
               alt="The Trout Gallery"
               className="hero-logo"
             />
-            <h1 className="hero-title">mysterious trout machine</h1>
+            <h1 className="hero-title">Mysterious Trout Machine</h1>
             <p className="hero-subtitle">
-              enter a phrase to reveal hidden connections.
+              Enter a phrase to reveal hidden connections.
             </p>
 
             <form onSubmit={handleSearch}>
               <input
                 type="text"
-                placeholder="castle and clouds"
+                placeholder="Castle and clouds"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 autoFocus
@@ -143,7 +143,7 @@ export default function Machine() {
 
             <div className="actions">
               <button className="lucky-btn" onClick={handleLucky}>
-                i'm feeling lucky
+                I'm feeling lucky
               </button>
             </div>
 
@@ -153,7 +153,7 @@ export default function Machine() {
                 onClick={handleSearch}
                 disabled={!query}
               >
-                search the collection →
+                Search the collection →
               </button>
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function Machine() {
       {/* CURATING STATE */}
       {status === "curating" && (
         <div className="state-curating fade-in">
-          <p>curating...</p>
+          <p>Curating...</p>
         </div>
       )}
 
@@ -203,8 +203,8 @@ export default function Machine() {
             </div>
           ) : (
             <div className="no-results">
-              <p>the machine is confused. "{query}" remains a mystery.</p>
-              <button onClick={reset}>try another phrase</button>
+              <p>The machine is confused. "{query}" remains a mystery.</p>
+              <button onClick={reset}>Try another phrase</button>
             </div>
           )}
         </div>
