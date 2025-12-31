@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "./Machine.css";
 
-const API_Base = import.meta.env.VITE_API_URL || "http://127.0.0.1:32001/api";
+const API_Base = import.meta.env.VITE_API_URL || "/api";
 
 export default function Machine() {
   const [status, setStatus] = useState("idle"); // idle, curating, results
