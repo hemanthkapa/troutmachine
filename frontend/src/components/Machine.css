@@ -331,8 +331,11 @@ input::placeholder {
 }
 
 .end-card button {
+  background: none;
+  border: none;
   color: #fff;
   font-size: 2rem;
+  cursor: pointer;
 }
 
 /* ANIMATIONS */
