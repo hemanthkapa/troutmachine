@@ -44,21 +44,44 @@ export default function Machine() {
 
   const [selectedArtwork, setSelectedArtwork] = useState(null);
   const [zoomProps, setZoomProps] = useState({ x: 0, y: 0, show: false });
+  const imageRef = useRef(null);
+  const containerRef = useRef(null);
 
-  // Magnifier Logic
+  // Magnifier Logic - improved to check actual image boundaries
   const handleImageMouseMove = (e) => {
-    const { left, top, width, height } =
-      e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - left;
-    const y = e.clientY - top;
+    if (!imageRef.current || !containerRef.current) return;
 
-    // Check boundaries
-    if (x < 0 || y < 0 || x > width || y > height) {
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const imgRect = imageRef.current.getBoundingClientRect();
+
+    // Mouse position relative to image
+    const xRelativeToImage = e.clientX - imgRect.left;
+    const yRelativeToImage = e.clientY - imgRect.top;
+
+    // Check if mouse is actually over the image
+    if (
+      xRelativeToImage < 0 ||
+      yRelativeToImage < 0 ||
+      xRelativeToImage > imgRect.width ||
+      yRelativeToImage > imgRect.height
+    ) {
       setZoomProps({ ...zoomProps, show: false });
       return;
     }
 
-    setZoomProps({ x, y, show: true, width, height });
+    // Position relative to container for absolute positioning
+    const xRelativeToContainer = e.clientX - containerRect.left;
+    const yRelativeToContainer = e.clientY - containerRect.top;
+
+    setZoomProps({
+      x: xRelativeToContainer,
+      y: yRelativeToContainer,
+      imgX: xRelativeToImage,
+      imgY: yRelativeToImage,
+      show: true,
+      imgWidth: imgRect.width,
+      imgHeight: imgRect.height,
+    });
   };
 
   const handleImageMouseLeave = () => {
@@ -246,32 +269,32 @@ export default function Machine() {
           <div className="detail-content">
             <div
               className="detail-image"
+              ref={containerRef}
               onMouseMove={handleImageMouseMove}
               onMouseLeave={handleImageMouseLeave}
-              onMouseEnter={handleImageMouseMove}
               style={{ position: "relative", overflow: "hidden" }}
             >
-              {" "}
-              {/* Added relative positioning */}
               <img
+                ref={imageRef}
                 src={selectedArtwork.image_url}
                 alt={selectedArtwork.title}
-                style={{ cursor: "crosshair" }}
+                style={{ cursor: "crosshair", display: "block" }}
               />
               {zoomProps.show && (
                 <div
                   className="magnifier-lens"
                   style={{
                     position: "absolute",
-                    left: `${zoomProps.x - 75}px`, // Center the lens (150px / 2)
+                    left: `${zoomProps.x - 75}px`,
                     top: `${zoomProps.y - 75}px`,
                     backgroundImage: `url(${selectedArtwork.image_url})`,
-                    backgroundPosition: `${
-                      (zoomProps.x / zoomProps.width) * 100
-                    }% ${(zoomProps.y / zoomProps.height) * 100}%`,
-                    backgroundSize: `${zoomProps.width * 2}px ${
-                      zoomProps.height * 2
-                    }px`, // 2x Zoom relative to formatted image size
+                    backgroundPosition: `${-(zoomProps.imgX * 2 - 75)}px ${-(
+                      zoomProps.imgY * 2 -
+                      75
+                    )}px`,
+                    backgroundSize: `${zoomProps.imgWidth * 2}px ${
+                      zoomProps.imgHeight * 2
+                    }px`,
                   }}
                 />
               )}
