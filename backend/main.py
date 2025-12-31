@@ -8,6 +8,12 @@ import os
 
 app = FastAPI()
 
+# Path Configuration - use absolute paths for deployment
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "../data")
+DB_PATH = os.path.join(DATA_DIR, "artworks.db")
+IMAGES_DIR = os.path.join(DATA_DIR, "images")
+
 # CORS configuration - set ALLOWED_ORIGINS env var in production
 # Example: ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
@@ -19,9 +25,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Database Config
-DB_PATH = "../data/artworks.db"
 
 class Artwork(BaseModel):
     id: str
@@ -49,7 +52,7 @@ def map_row_to_artwork(row, base_url: str = "http://127.0.0.1:32001") -> Artwork
     extensions = ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG', '.webp', '.gif']
     for ext in extensions:
         image_filename = f"{row['artwork_id']}{ext}"
-        local_image_path = os.path.join("../data/images", image_filename)
+        local_image_path = os.path.join(IMAGES_DIR, image_filename)
         if os.path.exists(local_image_path):
             final_image_url = f"{base_url}/images/{image_filename}"
             break
@@ -92,7 +95,7 @@ def health_check():
     return {"status": "ok"}
 
 @app.get("/api/search", response_model=List[Artwork])
-def search_artworks(request: Request, q: str = Query(..., min_length=1)):
+def search_artworks(request: Request, q: str = Query(..., min_length=1, max_length=200)):
     """Search by title or artist."""
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -144,7 +147,7 @@ def search_artworks(request: Request, q: str = Query(..., min_length=1)):
     return unique_results
 
 @app.get("/api/random", response_model=List[Artwork])
-def random_artworks(request: Request, count: int = 10):
+def random_artworks(request: Request, count: int = Query(10, ge=1, le=50)):
     """Return random artworks for 'I'm Feeling Lucky'."""
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -184,5 +187,5 @@ def get_artwork(artwork_id: str, request: Request):
     raise HTTPException(status_code=404, detail="Artwork not found")
 
 # Serve images if they exist locally (future proofing)
-if os.path.exists("../data/images"):
-    app.mount("/images", StaticFiles(directory="../data/images"), name="images")
+if os.path.exists(IMAGES_DIR):
+    app.mount("/images", StaticFiles(directory=IMAGES_DIR), name="images")
