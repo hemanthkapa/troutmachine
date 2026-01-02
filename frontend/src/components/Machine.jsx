@@ -9,7 +9,7 @@ export default function Machine() {
   const [artworks, setArtworks] = useState([]);
   const [title, setTitle] = useState("Mysterious Trout Machine");
   const galleryTrackRef = useRef(null);
-  
+
   // Mobile detection state
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -55,7 +55,7 @@ export default function Machine() {
   const handleImageMouseMove = (e) => {
     // Disable magnifier on mobile/tablet
     if (isMobile) return;
-    
+
     if (!imageRef.current || !containerRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
@@ -135,9 +135,9 @@ export default function Machine() {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Mouse wheel scroll handler for horizontal gallery scrolling with smooth behavior
@@ -147,8 +147,8 @@ export default function Machine() {
 
     const handleWheel = (e) => {
       // On mobile/touch devices, use native touch scrolling
-      if ('ontouchstart' in window || isMobile) return;
-      
+      if ("ontouchstart" in window || isMobile) return;
+
       // If there's horizontal scrolling (trackpad gesture), let it work naturally
       if (Math.abs(e.deltaX) > 0) {
         return; // Don't prevent default, allow native trackpad scrolling
@@ -298,9 +298,9 @@ export default function Machine() {
                 ref={imageRef}
                 src={selectedArtwork.image_url}
                 alt={selectedArtwork.title}
-                style={{ 
-                  cursor: isMobile ? "default" : "crosshair", 
-                  display: "block" 
+                style={{
+                  cursor: isMobile ? "default" : "crosshair",
+                  display: "block",
                 }}
               />
               {zoomProps.show && (
